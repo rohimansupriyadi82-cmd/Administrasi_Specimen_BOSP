@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="application-name" content="Aplikasi Administrasi BOSP">
+    <meta name="theme-color" content="#0f172a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Aplikasi Administrasi BOSP - Rohiman Supriyadi</title>
+    <link rel="manifest" href="./manifest.webmanifest">
+    <link rel="icon" href="./icon.svg" type="image/svg+xml">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* ============================================
+           CSS CETAK F4 PRESISI - SEMUA DOKUMEN
+           Ukuran F4 = 215mm x 330mm
+        ============================================ */
+        @media print {
+            @page {
+                size: 215mm 330mm;
+                margin: 15mm;
+            }
+            * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+            html, body {
+                width: 215mm !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                background: white !important;
+                overflow: visible !important;
+            }
+            .no-print { display: none !important; }
+            .tab-content { display: none !important; }
+            .tab-content:not(.hidden) { display: block !important; }
+            .print-page {
+                box-shadow: none !important;
+                border: none !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                width: 100% !important;
+                min-height: auto !important;
+                background: white !important;
+                overflow: visible !important;
+            }
+            body > div:first-child { display: none !important; }
+            #main-container { width: 100% !important; overflow: visible !important; height: auto !important; }
+            main { padding: 0 !important; }
+            ::-webkit-scrollbar { display: none; }
+            .ttd-3col { gap: 6mm; font-size: 10.5pt; }
+        }
+
+        /* Tampilan layar - preview */
+        .print-page {
+            font-family: 'Aptos Narrow', 'Segoe UI', Arial, sans-serif;
+            color: black;
+            font-size: 12pt;
+            line-height: 1.4;
+            padding: 15mm !important;
+            box-sizing: border-box;
+            width: 215mm;
+            min-height: 330mm;
+        }
+
+        .text-justify { text-align: justify; text-justify: inter-word; }
+
+        /* KOP Sekolah - FONT ARIAL */
+        .kop-container {
+            font-family: Arial, sans-serif !important;
+            display: flex;
+            align-items: center;
+            border-bottom: 4px double black;
+            padding-bottom: 4px;
+            margin-bottom: 12px;
+        }
+        .kop-logo { width: 90px; flex-shrink: 0; }
+        .kop-text { flex-grow: 1; text-align: center; padding-right: 30px; }
+        .kop-text * { font-family: Arial, sans-serif !important; }
+        .kop-line-1 { font-size: 14pt; font-weight: bold; margin: 0; line-height: 1.15; }
+        .kop-line-2 { font-size: 14pt; font-weight: bold; margin: 0; line-height: 1.15; }
+        .kop-line-3 { font-size: 20pt; font-weight: bold; margin: 0; line-height: 1.1; }
+        .kop-line-4 { font-size: 13pt; font-weight: bold; margin: 1px 0; line-height: 1.1; }
+        .kop-line-5 { font-size: 10pt; margin: 0; line-height: 1.2; }
+        .kop-line-6 { font-size: 10pt; color: blue; font-weight: bold; margin: 0; line-height: 1.2; }
+
+        .info-table td { vertical-align: top; padding-top: 1px; padding-bottom: 1px; }
+        .label-col { width: 200px; }
+        .dots-col { width: 20px; text-align: center; }
+
+        .name-underline { text-decoration: underline; font-weight: normal !important; }
+        .font-normal-doc { font-weight: normal !important; }
+        .ttd-block { text-align: center; }
+        .ttd-spacer { height: 55px; }
+        .ttd-3col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8mm; text-align: center; align-items: start; font-size: 11pt; line-height: 1.15; }
+        .ttd-3col .ttd-block { min-width: 0; }
+        .ttd-nowrap { white-space: nowrap; }
+        .kop-official {
+            font-family: Arial, sans-serif !important;
+            display: grid;
+            grid-template-columns: 28mm 1fr 28mm;
+            column-gap: 2mm;
+            row-gap: 0;
+            align-items: center;
+            border-bottom: 4px double #000;
+            padding-bottom: 2mm;
+            margin-bottom: 4mm;
+        }
+        .kop-official-logo { justify-self: end; }
+        .kop-official-logo img { width: 28mm; height: auto; display: block; }
+        .kop-official-text { text-align: center; }
+        .kop-official-line-1 { font-size: 16pt; font-weight: 700; margin: 0; line-height: 1.05; }
+        .kop-official-line-2 { font-size: 16pt; font-weight: 700; margin: 0; line-height: 1.05; }
+        .kop-official-line-3 { font-size: 22pt; font-weight: 800; margin: 0; line-height: 1.02; }
+        .kop-official-line-4 { font-size: 14pt; font-weight: 700; margin: 1px 0 0; line-height: 1.06; }
+        .kop-official-line-5 { font-size: 10pt; font-weight: 400; margin: 2px 0 0; line-height: 1.2; white-space: nowrap; }
+        .kop-official-line-6 { font-size: 10pt; font-weight: 400; margin: 0; line-height: 1.2; white-space: nowrap; }
+        .out-memperhatikan-sk { white-space: pre-wrap; }
+        @media print {
+            .kop-official, .kop-official * { color: #000 !important; }
+        }
+        .doc-surat { color: #000; }
+        .doc-surat * { font-weight: 400 !important; }
+        .doc-surat .doc-title { font-weight: 700 !important; }
+        .doc-surat .doc-title { margin: 0 0 1mm 0; line-height: 1.05; }
+        .doc-surat .doc-no { margin: 0 0 4mm 0; line-height: 1.05; }
+
+        .ba-ben-doc { color: #000; }
+        .ba-ben-doc * { font-weight: 400 !important; }
+        .ba-ben-doc .ba-ben-title { font-weight: 700 !important; }
+        .ba-ben-doc .ba-ben-ttd-name { font-weight: 700 !important; }
+        .ba-ben-doc .name-underline.ba-ben-ttd-name { font-weight: 700 !important; }
+        .ba-ben-doc .ba-ben-title { margin: 0 0 4mm 0; line-height: 1.1; }
+        .ba-ben-doc .ba-ben-school { display: inline-block; white-space: nowrap; }
+        .ba-kepsek-school { display: inline-block; white-space: nowrap; }
+        .ba-ben-ttd-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 10mm; text-align: center; align-items: start; }
+        .ba-ben-ttd-date { text-align: right; margin: 0 10mm 4mm 0; }
+    </style>
+</head>
+<body class="bg-slate-100 font-sans text-slate-800 flex h-screen overflow-hidden">
+
+    <!-- SIDEBAR -->
+    <div class="w-72 bg-slate-900 text-slate-200 flex flex-col justify-between shadow-xl no-print flex-shrink-0">
+        <div class="p-6">
+            <div class="flex items-center space-x-3 mb-8 border-b border-slate-800 pb-4">
+                <i class="fa-solid fa-calculator text-2xl text-amber-400"></i>
+                <div>
+                    <h1 class="text-lg font-bold text-white tracking-wide">Specimen_BOSP</h1>
+                    <p class="text-xs text-slate-400">Rohiman Supriyadi</p>
+                </div>
+            </div>
+            
+            <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Master Data</p>
+            <nav class="space-y-1 mb-6">
+                <a href="#" onclick="switchTab(event,'data-sekolah')" id="btn-data-sekolah" class="nav-link flex items-center space-x-3 p-3 rounded-lg bg-indigo-700 text-white font-medium transition">
+                    <i class="fa-solid fa-school w-5 text-amber-400"></i><span>Data Sekolah</span>
+                </a>
+                <a href="#" onclick="switchTab(event,'data-pejabat')" id="btn-data-pejabat" class="nav-link flex items-center space-x-3 p-3 rounded-lg hover:bg-slate-800 transition text-slate-400 hover:text-white">
+                    <i class="fa-solid fa-user-tie w-5"></i><span>Data Pejabat</span>
+                </a>
+                <a href="#" onclick="switchTab(event,'data-setting')" id="btn-data-setting" class="nav-link flex items-center space-x-3 p-3 rounded-lg hover:bg-slate-800 transition text-slate-400 hover:text-white">
+                    <i class="fa-solid fa-calendar-days w-5"></i><span>Pengaturan Dokumen</span>
+                </a>
+            </nav>
+
+            <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Cetak Dokumen</p>
+            <nav class="space-y-1">
+                <a href="#" onclick="switchTab(event,'cetak-ba')" id="btn-cetak-ba" class="nav-link flex items-center space-x-3 p-3 rounded-lg hover:bg-slate-800 transition text-slate-400 hover:text-white">
+                    <i class="fa-solid fa-file-signature w-5"></i><span>BA Sertijab Kepsek</span>
+                </a>
+                <a href="#" onclick="switchTab(event,'cetak-ba-ben')" id="btn-cetak-ba-ben" class="nav-link flex items-center space-x-3 p-3 rounded-lg hover:bg-slate-800 transition text-slate-400 hover:text-white">
+                    <i class="fa-solid fa-file-invoice w-5"></i><span>BA Sertijab Bendahara</span>
+                </a>
+                <a href="#" onclick="switchTab(event,'cetak-sk')" id="btn-cetak-sk" class="nav-link flex items-center space-x-3 p-3 rounded-lg hover:bg-slate-800 transition text-slate-400 hover:text-white">
+                    <i class="fa-solid fa-file-contract w-5"></i><span>SK Bendahara</span>
+                </a>
+                <a href="#" onclick="switchTab(event,'cetak-specimen')" id="btn-cetak-specimen" class="nav-link flex items-center space-x-3 p-3 rounded-lg hover:bg-slate-800 transition text-slate-400 hover:text-white">
+                    <i class="fa-solid fa-building-columns w-5"></i><span>Surat Spesimen</span>
+                </a>
+            </nav>
+        </div>
+        <div class="p-4 border-t border-slate-800 text-xs text-slate-500 text-center">&copy; 2026 BOSP v2.7</div>
+    </div>
+
+    <div class="flex-1 flex flex-col overflow-y-auto" id="main-container">
+        <header class="bg-white shadow-sm px-8 py-4 flex justify-between items-center no-print">
+            <h2 class="text-xl font-bold text-slate-800" id="page-title">Data Sekolah</h2>
+            <div class="flex items-center gap-3">
+                <div id="net-badge" class="hidden text-xs font-bold bg-rose-50 px-3 py-1 rounded-full text-rose-700 border border-rose-200">Offline</div>
+                <div id="save-badge" class="hidden text-xs font-bold bg-emerald-50 px-3 py-1 rounded-full text-emerald-700 border border-emerald-200">Tersimpan</div>
+                <button id="install-btn" class="hidden text-sm font-bold bg-slate-900 text-white px-3 py-2 rounded-lg shadow-sm hover:bg-slate-800">Pasang Aplikasi</button>
+                <div class="text-sm font-medium bg-indigo-50 px-3 py-1 rounded-full text-indigo-600 border">TA: 2026</div>
+            </div>
+        </header>
+
+        <main class="p-8 flex-1">
+            
+            <!-- TAB DATA SEKOLAH -->
+            <div id="tab-data-sekolah" class="tab-content">
+                <div class="bg-white p-6 rounded-xl shadow-md border border-slate-200 max-w-4xl">
+                    <h3 class="text-lg font-bold text-slate-700 mb-6 pb-2 border-b flex items-center gap-2"><i class="fa-solid fa-school text-indigo-600"></i> Identitas Sekolah & KOP</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-4">
+                        <div class="space-y-1">
+                            <label class="text-xs font-bold text-slate-500 uppercase">Status Sekolah</label>
+                            <select id="in-status" class="w-full p-2.5 border rounded-lg bg-slate-50 font-bold outline-none border-indigo-300">
+                                <option value="NEGERI" selected>NEGERI</option>
+                                <option value="SWASTA">SWASTA</option>
+                            </select>
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-xs font-bold text-slate-500 uppercase">Nama Sekolah (Tanpa SDN/TK)</label>
+                            <input type="text" id="in-nama-sekolah" value="Muara Bakti 01" class="w-full p-2.5 border rounded-lg font-bold outline-none">
+                        </div>
+
+                        <div id="grp-negeri" class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-5">
+                            <div class="space-y-1">
+                                <label class="text-xs font-bold text-slate-500 uppercase">Pemerintah Kabupaten/Kota</label>
+                                <input type="text" id="in-pemda" value="PEMERINTAH KABUPATEN BEKASI" class="w-full p-2.5 border rounded-lg">
+                            </div>
+                            <div class="space-y-1">
+                                <label class="text-xs font-bold text-slate-500 uppercase">Dinas Pendidikan</label>
+                                <input type="text" id="in-dinas" value="DINAS PENDIDIKAN" class="w-full p-2.5 border rounded-lg">
+                            </div>
+                        </div>
+
+                        <div id="grp-swasta" class="md:col-span-2 hidden grid grid-cols-1 md:grid-cols-2 gap-5">
+                            <div class="space-y-1">
+                                <label class="text-xs font-bold text-indigo-600 uppercase">Nama Yayasan</label>
+                                <input type="text" id="in-yayasan-kop" value="YAYASAN PENDIDIKAN MUARA BAKTI" class="w-full p-2.5 border rounded-lg bg-indigo-50 border-indigo-200">
+                            </div>
+                            <div class="space-y-1">
+                                <label class="text-xs font-bold text-indigo-600 uppercase">Nama Ketua Yayasan</label>
+                                <input type="text" id="in-yayasan-ketua" value="H. NANANG, S.AP" class="w-full p-2.5 border rounded-lg bg-indigo-50 border-indigo-200">
+                            </div>
+                        </div>
+
+                        <div class="space-y-1">
+                            <label class="text-xs font-bold text-slate-500 uppercase">Nama Kecamatan</label>
+                            <input type="text" id="in-kecamatan" value="Babelan" class="w-full p-2.5 border rounded-lg">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-xs font-bold text-slate-500 uppercase">Email Sekolah</label>
+                            <input type="text" id="in-email" value="sdnmuarabakti01@gmail.com" class="w-full p-2.5 border rounded-lg">
+                        </div>
+                        <div class="md:col-span-2 space-y-1">
+                            <label class="text-xs font-bold text-slate-500 uppercase">Alamat Lengkap</label>
+                            <input type="text" id="in-alamat" value="Jl. Bayangkara Rt. 12/07 Ds. Muara Bakti" class="w-full p-2.5 border rounded-lg">
+                        </div>
+                        <div id="logo-upload-wrap" class="space-y-1">
+                            <label class="text-xs font-bold text-slate-500 uppercase">Upload Logo</label>
+                            <input type="file" onchange="previewImage(event)" class="w-full text-xs p-2 border border-dashed rounded-lg bg-slate-50">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB DATA PEJABAT -->
+            <div id="tab-data-pejabat" class="tab-content hidden">
+                <div class="space-y-6 max-w-5xl">
+                    <!-- PEJABAT BA -->
+                    <div class="bg-white p-6 rounded-xl shadow-md border-l-4 border-indigo-500">
+                        <h3 class="text-md font-bold text-slate-700 mb-4 flex items-center gap-2"><i class="fa-solid fa-user-tie text-indigo-600"></i> Pejabat Sertijab</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="space-y-2 p-3 rounded bg-slate-50 border">
+                                <p class="text-xs font-bold text-slate-500 uppercase">Kepsek Baru (Pihak II)</p>
+                                <input type="text" id="ba-p2-nama" value="ROHIMAH, S.Pd" class="w-full p-2 border rounded">
+                                <input type="text" id="ba-p2-nip" value="19680604 200604 2 004" class="w-full p-2 border rounded">
+                                <input type="text" id="ba-p2-gol" value="Penata Tingkat I, III/d" class="w-full p-2 border rounded">
+                                <input type="text" id="ba-p2-jab" value="Plt. Kepala Sekolah {SEKOLAH_DOC}" class="w-full p-2 border rounded" placeholder="Jabatan Kepsek Baru">
+                            </div>
+                            <div class="space-y-2 p-3 rounded bg-slate-50 border">
+                                <p class="text-xs font-bold text-slate-500 uppercase">Kepsek Lama (Pihak I)</p>
+                                <input type="text" id="ba-p1-nama" value="TATI LESTARI, S.Pd" class="w-full p-2 border rounded">
+                                <input type="text" id="ba-p1-nip" value="19771209 200801 2 004" class="w-full p-2 border rounded">
+                                <input type="text" id="ba-p1-gol" value="Penata, III/c" class="w-full p-2 border rounded">
+                                <input type="text" id="ba-p1-jab" value="Plt. Kepala Sekolah {SEKOLAH_DOC}" class="w-full p-2 border rounded" placeholder="Jabatan Kepsek Lama">
+                            </div>
+                            <!-- Bendahara Lama/Baru -->
+                            <div class="space-y-2 p-3 rounded bg-amber-50 border">
+                                <p class="text-xs font-bold text-amber-700 uppercase">Bendahara Baru (Pihak II)</p>
+                                <input type="text" id="ba-ben-p2-nama" value="SRIE INDAH WELLYAWATI, S.Pd" class="w-full p-2 border rounded">
+                                <input type="text" id="ba-ben-p2-nip" value="-" class="w-full p-2 border rounded" placeholder="NIP">
+                                <input type="text" id="ba-ben-p2-gol" value="-" class="w-full p-2 border rounded" placeholder="Pangkat/Golongan Ruang">
+                            </div>
+                            <div class="space-y-2 p-3 rounded bg-amber-50 border">
+                                <p class="text-xs font-bold text-amber-700 uppercase">Bendahara Lama (Pihak I)</p>
+                                <input type="text" id="ba-ben-p1-nama" value="PUPI HIKMAYATI" class="w-full p-2 border rounded">
+                                <input type="text" id="ba-ben-p1-nip" value="-" class="w-full p-2 border rounded" placeholder="NIP">
+                                <input type="text" id="ba-ben-p1-gol" value="-" class="w-full p-2 border rounded" placeholder="Pangkat/Golongan Ruang">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- DATA BENDAHARA SK -->
+                    <div class="bg-white p-6 rounded-xl shadow-md border-l-4 border-emerald-500">
+                        <h3 class="text-md font-bold text-slate-700 mb-4 flex items-center gap-2"><i class="fa-solid fa-user-check text-emerald-600"></i> Identitas Bendahara di SK</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <input type="text" id="sk-ben-nama" value="MASTUROH, S.Pd" placeholder="Nama" class="w-full p-2 border rounded">
+                            <input type="text" id="sk-ben-nip" value="19800106 201409 2 001" placeholder="NIP" class="w-full p-2 border rounded">
+                            <input type="text" id="sk-ben-ttl" value="Bekasi, 06 Januari 1980" placeholder="TTL" class="w-full p-2 border rounded">
+                            <input type="text" id="sk-ben-pend" value="S.1 / Kependidikan" placeholder="Pendidikan" class="w-full p-2 border rounded">
+                            <textarea id="sk-ben-alamat" rows="2" class="w-full p-2 border rounded md:col-span-2 text-xs" placeholder="Jl. ... Kec. ... Kab. ...">Jln Muara Bakti Kp. Babakan RT. 08/03 Ds. Muara Bakti Kec. Babelan Kab. Bekasi</textarea>
+                        </div>
+                    </div>
+
+                    <!-- PEMBINA -->
+                    <div class="bg-white p-6 rounded-xl shadow-md border-l-4 border-slate-500">
+                        <h3 class="text-md font-bold text-slate-700 mb-4">3. Pejabat Pembina (Untuk Negeri)</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 gov-field">
+                            <div class="space-y-2 p-2 border rounded">
+                                <p class="text-xs font-bold uppercase">Pengawas Bina</p>
+                                <input type="text" id="ba-pengawas-nama" value="ANWAR SAHADAT, S.Pd., M.Si" class="w-full p-2 border rounded">
+                                <input type="text" id="ba-pengawas-nip" value="19660503 198803 1 010" class="w-full p-2 border rounded">
+                            </div>
+                            <div class="space-y-2 p-2 border rounded">
+                                <p class="text-xs font-bold uppercase">Korwil</p>
+                                <input type="text" id="ba-korwil-nama" value="HJ, ITA MARLISAH, S.Pd.MM" class="w-full p-2 border rounded">
+                                <input type="text" id="ba-korwil-nip" value="19671002 199303 2 006" class="w-full p-2 border rounded">
+                            </div>
+                            <div class="space-y-2 p-2 border rounded">
+                                <p class="text-xs font-bold uppercase">Korwas</p>
+                                <input type="text" id="ba-korwas-nama" value="ANWAR SAHADAT, S.Pd., M.Si" class="w-full p-2 border rounded">
+                                <input type="text" id="ba-korwas-nip" value="19660503 198803 1 010" class="w-full p-2 border rounded">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB SETTING -->
+            <div id="tab-data-setting" class="tab-content hidden">
+                <div class="bg-white p-6 rounded-xl shadow-md border border-slate-200 max-w-4xl">
+                    <h3 class="text-lg font-bold text-slate-700 mb-6 pb-2 border-b flex items-center gap-2"><i class="fa-solid fa-gears text-indigo-600"></i> Pengaturan Redaksi</h3>
+                    <div class="grid grid-cols-1 gap-6">
+                        <div class="p-4 bg-indigo-50 rounded-lg border border-indigo-200">
+                            <label class="text-xs font-bold text-indigo-800 block mb-2 uppercase">Edit Judul BA Sertijab (Kembali)</label>
+                            <textarea id="in-judul-ba" rows="3" class="w-full p-3 border rounded font-mono text-xs">BERITA ACARA
+SERAH TERIMA JABATAN KEPALA SEKOLAH DASAR NEGERI MUARA BAKTI 01
+DINAS PENDIDIKAN KECAMATAN BABELAN KABUPATEN BEKASI</textarea>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="p-4 bg-slate-50 rounded-lg border">
+                                <p class="text-xs font-bold text-slate-500 mb-2 uppercase">Titi Mangsa</p>
+                                <input type="text" id="in-kota" value="Bekasi" class="w-full p-2 border rounded mb-2">
+                                <input type="text" id="in-tgl-umum" value="21 Mei 2026" class="w-full p-2 border rounded shadow-sm">
+                                <input type="text" id="in-tgl-ba" value="18 Mei 2026" class="w-full p-2 border mt-2 rounded shadow-sm" placeholder="Tgl BA">
+                                <input type="text" id="in-tgl-sk" value="27 April 2026" class="w-full p-2 border mt-2 rounded shadow-sm" placeholder="Tgl SK">
+                            </div>
+                            <div class="p-4 bg-emerald-50 rounded-lg border border-emerald-100">
+                                <p class="text-xs font-bold text-emerald-800 mb-2 uppercase">Penomoran</p>
+                                <input type="text" id="in-no-sk" value="900/0016/SDN.MB01/IV/2025" class="w-full p-2 border mb-2 rounded shadow-sm">
+                                <input type="text" id="in-no-spec" value="900/018/SDN.MB01/V/2026" class="w-full p-2 border mb-2 rounded shadow-sm">
+                                <input type="text" id="in-no-bupati" value="800.1.31/2177-BKPSDM/2026" class="w-full p-2 border rounded shadow-sm">
+                            </div>
+                        </div>
+                    <div class="p-4 bg-slate-50 rounded-lg border">
+                        <p class="text-xs font-bold text-slate-700 mb-2 uppercase">Konsideran SK (Memperhatikan)</p>
+                        <textarea id="in-memperhatikan-sk" rows="3" class="w-full p-3 border rounded text-xs">Surat Keputusan Bupati Bekasi Nomor : {NO_BUPATI} tentang Pengangkatan Kepala Sekolah Dasar {STATUS_LC} {NAMA_SEKOLAH_TC} {KECAMATAN_TC}-Bekasi</textarea>
+                    </div>
+                        <div class="p-4 bg-amber-50 border rounded-lg">
+                            <p class="text-xs font-bold text-amber-800 mb-2 uppercase">Isian BA Teks</p>
+                            <input type="text" id="in-hari-ba" value="Minggu" class="w-full p-2 border mb-2 rounded">
+                            <input type="text" id="in-tgl-teks" value="Enam April Tahun Dua Ribu Dua Puluh Empat" class="w-full p-2 border rounded">
+                            <input type="text" id="in-rek-nama" value="20218290 {SEKOLAH_DOC}" class="w-full p-2 border mt-2 rounded">
+                            <input type="text" id="in-rek-no" value="0120331531100" class="w-full p-2 border mt-2 rounded">
+                            <input type="text" id="in-bank" value="Bank BJB Babelan" class="w-full p-2 border mt-2 rounded">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- HASIL CETAK BA KEPSEK -->
+            <div id="tab-cetak-ba" class="tab-content hidden">
+                <div class="no-print bg-amber-50 p-4 rounded-xl mb-6 flex justify-between items-center max-w-[215mm] border border-amber-200">
+                    <p class="text-sm font-medium"><i class="fa-solid fa-print mr-2"></i>BA Sertijab Kepsek (F4).</p>
+                    <button onclick="window.print()" class="bg-indigo-600 text-white px-4 py-2 rounded-lg font-bold shadow-md">Cetak BA</button>
+                </div>
+
+                <div class="print-page bg-white shadow-xl mx-auto">
+                    <!-- JUDUL -->
+                    <div class="text-center font-bold uppercase mb-4 leading-tight whitespace-pre-wrap out-judul-ba"></div>
+
+                    <!-- PEMBUKA -->
+                    <p class="text-justify mb-3">
+                        Pada hari ini <span class="out-hari-ba font-bold">Minggu</span> Tanggal <span class="out-tgl-teks font-bold">Enam April Tahun Dua Ribu Dua Puluh Empat</span> di <span class="ba-kepsek-school"><span class="out-sekolah-doc font-bold"></span></span> Kecamatan <span class="out-kecamatan font-bold">Babelan</span> Kabupaten Bekasi Jawa Barat.
+                    </p>
+                    <p class="mb-3">Telah dilaksanakan serah terima jabatan antara :</p>
+
+                    <!-- PIHAK I -->
+                    <table class="w-full mb-1 ml-4">
+                        <tr><td width="210">Nama</td><td width="20">:</td><td><span class="out-ba-p1-nama font-normal-doc">TATI LESTARI, S.Pd</span></td></tr>
+                        <tr><td>NIP.</td><td>:</td><td><span class="out-ba-p1-nip font-normal-doc">19771209 200801 2 004</span></td></tr>
+                        <tr><td>Pangkat/Golongan Ruang</td><td>:</td><td><span class="out-ba-p1-gol font-normal-doc">Penata, III/c</span></td></tr>
+                        <tr><td>Jabatan</td><td>:</td><td><span class="out-ba-p1-jab font-normal-doc"></span></td></tr>
+                    </table>
+                    <p class="mb-3 ml-4">Selanjutnya di sebut <span class="font-bold">Pihak I (Pertama)</span></p>
+
+                    <!-- PIHAK II -->
+                    <table class="w-full mb-1 ml-4">
+                        <tr><td width="210">Nama</td><td width="20">:</td><td><span class="out-ba-p2-nama font-normal-doc">ROHIMAH, S.Pd</span></td></tr>
+                        <tr><td>NIP.</td><td>:</td><td><span class="out-ba-p2-nip font-normal-doc">19680604 200604 2 004</span></td></tr>
+                        <tr><td>Pangkat/Golongan Ruang</td><td>:</td><td><span class="out-ba-p2-gol font-normal-doc">Penata Tingkat I, III/d</span></td></tr>
+                        <tr><td>Jabatan</td><td>:</td><td><span class="out-ba-p2-jab font-normal-doc"></span></td></tr>
+                    </table>
+                    <p class="mb-3 ml-4">Selanjutnya di sebut <span class="font-bold">Pihak ke II (Dua)</span></p>
+
+                    <!-- ISI -->
+                    <p class="text-justify mb-2 font-normal-doc">Pihak ke I menyerahkan segala tugas dan tanggung jawab dan kewenangan kepada pihak ke II dan pihak ke II menerima pernyataan dari pihak I dengan lampiran tersebut di bawah ini dan terlampir sebagai berikut :</p>
+                    <table class="w-full mb-3 ml-8 font-normal-doc">
+                        <tr><td width="30">a.</td><td>Memuat Keadaan Pendidik dan Tenaga Kependidikan</td></tr>
+                        <tr><td>b.</td><td>Memuat Tentang Laporan Keuangan Sekolah</td></tr>
+                    </table>
+
+                    <p class="mb-2 font-normal-doc">Berita Serah Terima Jabatan ini dibuat rangkap 3 (tiga)</p>
+                    <table class="w-full mb-3 ml-8 font-normal-doc">
+                        <tr><td width="30">1.</td><td>Satu bendel untuk Pihak ke I</td></tr>
+                        <tr><td>2.</td><td>Satu bendel untuk Pihak ke II</td></tr>
+                        <tr><td>3.</td><td>Satu bendel untuk Sekolah</td></tr>
+                    </table>
+
+                    <p class="text-justify mb-4 font-normal-doc">Dengan catatan segala sesuatu yang belum terselesaikan sampai dengan tanggal serah terima jabatan ini masih menjadi tanggung jawab pihak ke I. Berita Serah terima Jabatan ini ditanda tangani bersama dan kami buat dengan sebenar-benarnya dengan mengingat sumpah jabatan untuk dipergunakan seperlunya.</p>
+
+                    <!-- TANDA TANGAN - Titi Mangsa (kanan) -->
+                    <div class="text-right mb-3 mr-6">
+                        <span class="out-kecamatan">Babelan</span>, <span class="out-tgl-ba">18 Mei 2026</span>
+                    </div>
+
+                    <!-- TTD NEGERI -->
+                    <div id="ttd-negeri" class="gov-only">
+                        <!-- Baris 1: Yang Menerima & Yang Menyerahkan -->
+                        <div class="grid grid-cols-2 text-center mb-2 leading-snug">
+                            <div class="ttd-block">
+                                Yang Menerima<br>
+                                (Pihak ke II)<br>
+                                <div class="ttd-spacer"></div>
+                                <span class="name-underline out-ba-p2-nama font-bold">ROHIMAH, S.Pd</span><br>
+                                NIP : <span class="out-ba-p2-nip">19680604 200604 2 004</span>
+                            </div>
+                            <div class="ttd-block">
+                                Yang Menyerahkan<br>
+                                (Pihak ke I)<br>
+                                <div class="ttd-spacer"></div>
+                                <span class="name-underline out-ba-p1-nama font-bold">TATI LESTARI, S.Pd</span><br>
+                                NIP : <span class="out-ba-p1-nip">19771209 200801 2 004</span>
+                            </div>
+                        </div>
+
+                        <!-- Mengetahui -->
+                        <div class="text-center mt-4 mb-2 font-bold">Mengetahui,</div>
+
+                        <!-- Baris 2: Pengawas, Korwil, Korwas -->
+                        <div class="ttd-3col">
+                            <div class="ttd-block">
+                                <span class="ttd-nowrap">Pengawas Bina</span><br>
+                                <span class="ttd-nowrap">Kecamatan <span class="out-kecamatan">Babelan</span></span><br>
+                                <div class="ttd-spacer"></div>
+                                <span class="name-underline out-ba-pengawas-nama font-bold ttd-nowrap">ANWAR SAHADAT, S.Pd., M.Si</span><br>
+                                <span class="ttd-nowrap">NIP : <span class="out-ba-pengawas-nip">19660503 198803 1 010</span></span>
+                            </div>
+                            <div class="ttd-block">
+                                <span class="ttd-nowrap">Koordinator Wilayah (Korwil)</span><br>
+                                <span class="ttd-nowrap">Kecamatan <span class="out-kecamatan">Babelan</span></span><br>
+                                <div class="ttd-spacer"></div>
+                                <span class="name-underline out-ba-korwil-nama font-bold ttd-nowrap">HJ, ITA MARLISAH, S.Pd.MM</span><br>
+                                <span class="ttd-nowrap">NIP. <span class="out-ba-korwil-nip">19671002 199303 2 006</span></span>
+                            </div>
+                            <div class="ttd-block">
+                                <span class="ttd-nowrap">Koordinator Pengawas (Korwas)</span><br>
+                                <span class="ttd-nowrap">Kecamatan <span class="out-kecamatan">Babelan</span></span><br>
+                                <div class="ttd-spacer"></div>
+                                <span class="name-underline out-ba-korwas-nama font-bold ttd-nowrap">ANWAR SAHADAT, S.Pd., M.Si</span><br>
+                                <span class="ttd-nowrap">NIP : <span class="out-ba-korwas-nip">19660503 198803 1 010</span></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TTD SWASTA -->
+                    <div id="ttd-swasta" class="hidden" style="font-size:12pt;">
+                        <!-- Baris 1: Yang Menerima & Yang Menyerahkan -->
+                        <div class="grid grid-cols-2 text-center mb-2 leading-snug">
+                            <div class="ttd-block">
+                                Yang Menerima<br>
+                                (Pihak ke II)<br>
+                                <div class="ttd-spacer"></div>
+                                <span class="name-underline out-ba-p2-nama font-bold">ROHIMAH, S.Pd</span><br>
+                                NIP : <span class="out-ba-p2-nip">19680604 200604 2 004</span>
+                            </div>
+                            <div class="ttd-block">
+                                Yang Menyerahkan<br>
+                                (Pihak ke I)<br>
+                                <div class="ttd-spacer"></div>
+                                <span class="name-underline out-ba-p1-nama font-bold">TATI LESTARI, S.Pd</span><br>
+                                NIP : <span class="out-ba-p1-nip">19771209 200801 2 004</span>
+                            </div>
+                        </div>
+
+                        <!-- Baris 2: Ketua Yayasan & Kepala Sekolah -->
+                        <div class="grid grid-cols-2 text-center mt-8 leading-snug">
+                            <div class="ttd-block">
+                                Ketua Yayasan<br>
+                                <span class="out-yayasan-kop font-bold">YAYASAN PENDIDIKAN MUARA BAKTI</span><br>
+                                <div class="ttd-spacer"></div>
+                                <span class="name-underline out-yayasan-ketua font-bold">H. NANANG, S.AP</span>
+                            </div>
+                            <div class="ttd-block">
+                                Kepala Sekolah<br>
+                                <span class="out-nama-sekolah-mixed-no-kec font-bold">Muara Bakti 01</span><br>
+                                <div class="ttd-spacer"></div>
+                                <span class="name-underline out-ba-p2-nama font-bold">ROHIMAH, S.Pd</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- HASIL CETAK BA BENDAHARA -->
+            <div id="tab-cetak-ba-ben" class="tab-content hidden">
+                <div class="no-print bg-amber-50 p-4 rounded-xl mb-6 flex justify-between items-center max-w-[215mm] border border-amber-200">
+                    <p class="text-sm font-medium"><i class="fa-solid fa-print mr-2"></i>BA Sertijab Bendahara (F4).</p>
+                    <button onclick="window.print()" class="bg-indigo-600 text-white px-4 py-2 rounded-lg font-bold shadow-md">Cetak BA</button>
+                </div>
+
+                <div class="print-page bg-white shadow-xl mx-auto ba-ben-doc">
+                    <div class="text-center uppercase leading-tight whitespace-pre-wrap ba-ben-title">BERITA ACARA<br>SERAH TERIMA JABATAN BENDAHARA <span class="ba-ben-school"><span class="out-sekolah-kop"></span></span><br>DINAS PENDIDIKAN KECAMATAN <span class="out-kecamatan-up"></span> KABUPATEN BEKASI</div>
+
+                    <p class="text-justify mb-4">
+                        Pada hari ini <span class="out-hari-ba"></span> Tanggal <span class="out-ba-tanggal"></span> Bulan <span class="out-ba-bulan"></span> Tahun <span class="out-ba-tahun-terbilang"></span> bertempat di <span class="ba-ben-school"><span class="out-sekolah-doc"></span></span> Kecamatan <span class="out-kecamatan-tc"></span> Kabupaten Bekasi Provinsi Jawa Barat, telah dilaksanakan serah terima jabatan Bendahara Sekolah antara:
+                    </p>
+
+                    <table class="w-full mb-3 ml-4">
+                        <tr><td width="220">Nama</td><td width="20">:</td><td><span class="out-ba-ben-p1-nama"></span></td></tr>
+                        <tr><td>NIP</td><td>:</td><td><span class="out-ba-ben-p1-nip"></span></td></tr>
+                        <tr><td>Pangkat/Golongan Ruang</td><td>:</td><td><span class="out-ba-ben-p1-gol"></span></td></tr>
+                        <tr><td>Jabatan</td><td>:</td><td>Bendahara <span class="out-sekolah-doc"></span> (Lama)</td></tr>
+                    </table>
+                    <p class="mb-5 ml-4">Selanjutnya disebut Pihak I (Pertama)</p>
+
+                    <table class="w-full mb-3 ml-4">
+                        <tr><td width="220">Nama</td><td width="20">:</td><td><span class="out-ba-ben-p2-nama"></span></td></tr>
+                        <tr><td>NIP</td><td>:</td><td><span class="out-ba-ben-p2-nip"></span></td></tr>
+                        <tr><td>Pangkat/Golongan Ruang</td><td>:</td><td><span class="out-ba-ben-p2-gol"></span></td></tr>
+                        <tr><td>Jabatan</td><td>:</td><td>Bendahara <span class="out-sekolah-doc"></span> (Baru)</td></tr>
+                    </table>
+                    <p class="mb-5 ml-4">Selanjutnya disebut Pihak ke II (Dua)</p>
+
+                    <p class="text-justify mb-2">Pihak ke I menyerahkan segala tugas dan tanggung jawab dan kewenangan kepada pihak ke II dan pihak ke II menerima pernyataan dari pihak I dengan lampiran tersebut di bawah ini dan terlampir sebagai berikut :</p>
+                    <table class="w-full mb-3 ml-8">
+                        <tr><td width="30">a.</td><td>Memuat Keadaan Pendidik dan Tenaga Kependidikan</td></tr>
+                        <tr><td>b.</td><td>Memuat Tentang Laporan Keuangan Sekolah</td></tr>
+                    </table>
+
+                    <p class="mb-2">Berita Serah Terima Jabatan ini dibuat rangkap 3 (tiga):</p>
+                    <table class="w-full mb-3 ml-8">
+                        <tr><td width="30">1.</td><td>Satu bendel untuk Pihak ke I</td></tr>
+                        <tr><td>2.</td><td>Satu bendel untuk Pihak ke II</td></tr>
+                        <tr><td>3.</td><td>Satu bendel untuk Sekolah</td></tr>
+                        <tr><td>4.</td><td>Satu bendel untuk Korwil</td></tr>
+                    </table>
+
+                    <p class="text-justify mb-8">Dengan catatan segala sesuatu yang belum terselesaikan sampai dengan tanggal serah terima jabatan ini masih menjadi tanggung jawab pihak ke I. Berita Serah terima Jabatan ini ditandatangani bersama dan kami buat dengan sebenar-benarnya dengan mengingat sumpah jabatan untuk dipergunakan seperlunya.</p>
+
+                    <div class="ba-ben-ttd-date">
+                        <span class="out-kecamatan-tc"></span>, <span class="out-tgl-ba"></span>
+                    </div>
+
+                    <div class="ba-ben-ttd-2col mb-6 leading-tight">
+                        <div class="ttd-block">
+                            Yang menerima (Pihak ke II)<br>
+                            <div class="ttd-spacer"></div>
+                            <span class="name-underline out-ba-ben-p2-nama ba-ben-ttd-name"></span>
+                        </div>
+                        <div class="ttd-block">
+                            Yang menyerahkan (Pihak ke I)<br>
+                            <div class="ttd-spacer"></div>
+                            <span class="name-underline out-ba-ben-p1-nama ba-ben-ttd-name"></span>
+                        </div>
+                    </div>
+
+                    <div class="gov-only">
+                        <div class="text-center mt-2 mb-2">Mengetahui,</div>
+                        <div class="ttd-3col">
+                            <div class="ttd-block">
+                                <span class="ttd-nowrap">Pengawas Bina</span><br>
+                                <div class="ttd-spacer"></div>
+                                <span class="name-underline out-ba-pengawas-nama ba-ben-ttd-name ttd-nowrap"></span><br>
+                                <span class="ttd-nowrap">NIP : <span class="out-ba-pengawas-nip"></span></span>
+                            </div>
+                            <div class="ttd-block">
+                                <span class="ttd-nowrap">Koordinator Wilayah (Korwil)</span><br>
+                                <div class="ttd-spacer"></div>
+                                <span class="name-underline out-ba-korwil-nama ba-ben-ttd-name ttd-nowrap"></span><br>
+                                <span class="ttd-nowrap">NIP. <span class="out-ba-korwil-nip"></span></span>
+                            </div>
+                            <div class="ttd-block">
+                                <span class="ttd-nowrap">Koordinator Pengawas (Korwas)</span><br>
+                                <div class="ttd-spacer"></div>
+                                <span class="name-underline out-ba-korwas-nama ba-ben-ttd-name ttd-nowrap"></span><br>
+                                <span class="ttd-nowrap">NIP : <span class="out-ba-korwas-nip"></span></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="swasta-only hidden">
+                        <div class="ba-ben-ttd-2col text-center mt-2 leading-tight" style="font-size:12pt;">
+                            <div class="ttd-block">
+                                Ketua Yayasan <span class="out-yayasan-kop"></span><br>
+                                <div class="ttd-spacer"></div>
+                                <span class="name-underline out-yayasan-ketua ba-ben-ttd-name"></span>
+                            </div>
+                            <div class="ttd-block">
+                                Kepala Sekolah <span class="out-sekolah-doc"></span><br>
+                                <div class="ttd-spacer"></div>
+                                <span class="name-underline out-ba-p2-nama ba-ben-ttd-name"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- HASIL CETAK SK BENDAHARA -->
+            <div id="tab-cetak-sk" class="tab-content hidden">
+                <div class="no-print bg-slate-800 p-4 rounded-xl mb-6 flex justify-between items-center max-w-[215mm] text-white">
+                    <p class="text-sm">SK Bendahara Sekolah (F4 Arial KOP).</p>
+                    <button onclick="window.print()" class="bg-indigo-600 text-white px-4 py-2 rounded-lg font-bold">Cetak SK</button>
+                </div>
+
+                <div class="print-page bg-white shadow-xl mx-auto">
+                    <div class="kop-official">
+                        <div class="kop-official-logo">
+                            <img id="logo-1" src="./kop-bekasi.png" alt="Logo">
+                        </div>
+                        <div class="kop-official-text" id="kop-sk-text">
+                            <div class="kop-official-line-1 kop-negeri-only"><span class="out-kop-line1">PEMERINTAH KABUPATEN BEKASI</span></div>
+                            <div class="kop-official-line-2 kop-negeri-only"><span class="out-kop-line2">DINAS PENDIDIKAN</span></div>
+                            <div class="kop-official-line-1 kop-swasta-only hidden"><span class="out-yayasan-kop">YAYASAN PENDIDIKAN MUARA BAKTI</span></div>
+                            <div class="kop-official-line-3"><span class="out-sekolah-kop">SDN MUARA BAKTI 01</span></div>
+                            <div class="kop-official-line-4">KECAMATAN <span class="out-kecamatan-up">BABELAN</span></div>
+                            <div class="kop-official-line-5">Alamat : <span class="out-alamat">Jl. Bhayangkara Rt. 12/07 Ds. Muara Bakti</span></div>
+                            <div class="kop-official-line-6">Email : <span class="out-email">sdnmuarabakti01@gmail.com</span></div>
+                        </div>
+                        <div class="kop-official-spacer"></div>
+                    </div>
+
+                    <div class="doc-surat">
+                        <div class="text-center uppercase underline doc-title">SURAT KEPUTUSAN KEPALA SEKOLAH</div>
+                        <div class="text-center font-normal-doc doc-no">Nomor : <span class="out-no-sk">900/0016/SDN.MB01/IV/2025</span></div>
+
+                        <div class="text-center font-bold mb-6 uppercase leading-tight">TENTANG<br>PENGANGKATAN BENDAHARA SEKOLAH<br><span class="out-sekolah-doc"></span></div>
+
+                    <table class="w-full mb-4 info-table font-normal-doc">
+                        <tr><td class="label-col font-bold">Menimbang</td><td class="dots-col">:</td><td class="text-justify">Bahwa dalam rangka memperlancar pelaksanaan proses belajar mengajar dan tertibnya penggunaan keuangan Sekolah Dasar <span class="out-status-lc">Negeri</span> <span class="out-nama-sekolah-tc">Muara Bakti 01</span></td></tr>
+                        <tr><td class="label-col font-bold">Mengingat</td><td class="dots-col">:</td><td class="text-justify">Undang-undang Republik Indonesia Nomor : 15 Tahun 2004 tentang Pemeriksaan, Pengelolaan dan Tanggung jawab Keuangan Negara</td></tr>
+                        <tr><td class="label-col font-bold">Memperhatikan</td><td class="dots-col">:</td><td class="text-justify"><span class="out-memperhatikan-sk">Surat Keputusan Bupati Bekasi Nomor : 800.1.31/2177-BKPSDM/2026 tentang Pengangkatan Kepala Sekolah Dasar Negeri Muara Bakti 01 Babelan-Bekasi</span></td></tr>
+                    </table>
+
+                        <div class="text-center font-bold my-4 tracking-widest uppercase">M E M U T U S K A N</div>
+
+                    <table class="w-full info-table font-normal-doc">
+                        <tr><td class="label-col font-bold uppercase">Menetapkan</td><td class="dots-col">:</td><td></td></tr>
+                        <tr><td class="label-col font-bold uppercase">PERTAMA</td><td class="dots-col">:</td><td class="text-justify">Mengangkat sebagai Bendahara BOS <span class="out-sekolah-doc"></span> kepada:</td></tr>
+                        <tr><td colspan="2"></td><td class="py-2">
+                            <table class="w-full">
+                                <tr><td width="140">Nama</td><td width="20">:</td><td><span class="out-sk-ben-nama">MASTUROH, S.Pd</span></td></tr>
+                                <tr><td>NIP</td><td>:</td><td><span class="out-sk-ben-nip">19800106 201409 2 001</span></td></tr>
+                                <tr><td>TTL</td><td>:</td><td><span class="out-sk-ben-ttl">Bekasi, 06 Januari 1980</span></td></tr>
+                                <tr><td>Pendidikan</td><td>:</td><td><span class="out-sk-ben-pend">S.1 / Kependidikan</span></td></tr>
+                                <tr><td valign="top">Alamat</td><td valign="top">:</td><td><span class="out-sk-ben-alamat">Jln Muara Bakti Kp. Babakan RT. 08/03 Ds. Muara Bakti Kec. Babelan Kab. Bekasi</span></td></tr>
+                            </table>
+                        </td></tr>
+                        <tr><td class="label-col font-bold uppercase">KEDUA</td><td class="dots-col">:</td><td class="text-justify">Surat Keputusan ini berlaku sejak ditetapkan dan akan ditinjau kembali apabila terdapat kekeliruan dalam penetapannya.</td></tr>
+                    </table>
+
+                        <div class="w-64 ml-auto text-left mt-10 leading-tight font-normal-doc">
+                        Ditetapkan di : <span class="out-kota">Bekasi</span><br>Pada tanggal : <span class="out-tgl-sk">27 April 2026</span><br>Kepala Sekolah<br><br><br><br><br>
+                        <span class="name-underline out-ba-p2-nama font-bold">ROHIMAH, S.Pd.</span><br>NIP. <span class="out-ba-p2-nip">19680604 200604 2 004</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- HASIL CETAK SPECIMEN -->
+            <div id="tab-cetak-specimen" class="tab-content hidden">
+                <div class="no-print bg-slate-800 p-4 rounded-xl mb-6 flex justify-between items-center max-w-[215mm] text-white">
+                    <p class="text-sm">Specimen Bank BJB (F4).</p>
+                    <button onclick="window.print()" class="bg-indigo-600 text-white px-4 py-2 rounded-lg font-bold shadow-md">Cetak Specimen</button>
+                </div>
+
+                <div class="print-page bg-white shadow-xl mx-auto">
+                    <div class="kop-official">
+                        <div class="kop-official-logo">
+                            <img id="logo-2" src="./kop-bekasi.png" alt="Logo">
+                        </div>
+                        <div class="kop-official-text">
+                            <div class="kop-official-line-1 kop-negeri-only"><span class="out-kop-line1">PEMERINTAH KABUPATEN BEKASI</span></div>
+                            <div class="kop-official-line-2 kop-negeri-only"><span class="out-kop-line2">DINAS PENDIDIKAN</span></div>
+                            <div class="kop-official-line-1 kop-swasta-only hidden"><span class="out-yayasan-kop">YAYASAN PENDIDIKAN MUARA BAKTI</span></div>
+                            <div class="kop-official-line-3"><span class="out-sekolah-kop">SDN MUARA BAKTI 01</span></div>
+                            <div class="kop-official-line-4">KECAMATAN <span class="out-kecamatan-up">BABELAN</span></div>
+                            <div class="kop-official-line-5">Alamat : <span class="out-alamat">Jl. Bhayangkara Rt. 12/07 Ds. Muara Bakti</span></div>
+                            <div class="kop-official-line-6">Email : <span class="out-email">sdnmuarabakti01@gmail.com</span></div>
+                        </div>
+                        <div class="kop-official-spacer"></div>
+                    </div>
+
+                    <div class="doc-surat">
+                        <div class="text-center underline uppercase doc-title">SURAT PERMOHONAN PERUBAHAN SPESIMEN</div>
+                        <div class="text-center doc-no">Nomor : <span class="out-no-spec">900/018/SDN.MB01/V/2026</span></div>
+
+                        <div class="mt-8 mb-6 leading-tight font-bold">Kepada Yth.<br>Bank BJB <span class="out-kecamatan">Babelan</span><br>di-<br><span class="ml-8">Tempat</span></div>
+
+                        <p class="text-justify mb-4">Saya yang bertanda tangan dibawah ini mengajukan permohonan untuk perubahan spesimen yang telah ada pada <span class="font-bold">Bank BJB <span class="out-kecamatan">Babelan</span></span>.</p>
+
+                        <table class="w-full mb-6 info-table">
+                        <tr><td class="label-col">Nama Pemegang Rekening</td><td class="dots-col">:</td><td class="font-bold"><span class="out-rek-nama"></span></td></tr>
+                        <tr><td>Nomor Rekening</td><td>:</td><td class="font-bold"><span class="out-rek-no">0120331531100</span> (BOS PUSAT)</td></tr>
+                        <tr><td>Alamat</td><td>:</td><td class="font-normal-doc">Jl. Bayangkara Rt. 12/07 Ds. Muara Bakti Kec. <span class="out-kecamatan">Babelan</span> Kab. Bekasi</td></tr>
+                        </table>
+
+                        <div class="grid grid-cols-2 gap-x-8 gap-y-4 mb-6 font-normal-doc leading-tight">
+                        <div><p class="font-bold underline">Pengurus Lama :</p>Nama : <span class="out-ba-p1-nama">TATI LESTARI</span><br>Jabatan : Plt. Kepala Sekolah</div>
+                        <div><p class="font-bold underline">Pengurus Baru :</p>Nama : <span class="out-ba-p2-nama font-bold">ROHIMAH, S.Pd</span><br>Jabatan : Plt. Kepala Sekolah</div>
+                        <div><p class="font-bold underline">Pengurus Lama :</p>Nama : <span class="out-ba-ben-p1-nama">PUPI HIKMAYATI</span><br>Jabatan : Bendahara Sekolah</div>
+                        <div><p class="font-bold underline">Pengurus Baru :</p>Nama : <span class="out-ba-ben-p2-nama font-bold">SRIE INDAH WELLYAWATI, S.Pd</span><br>Jabatan : Bendahara Sekolah</div>
+                        </div>
+
+                        <p class="mb-2">Adapun perubahan ini dilakukan karena adanya perubahan data serta dokumen terlampir, yaitu :</p>
+                        <div class="grid grid-cols-2 text-[10.5pt] mb-6 leading-tight font-normal-doc">
+                        <div>
+                            1. Asli &amp; FC SK Kepsek/Bendahara<br>
+                            2. Asli &amp; FC KTP Kepsek/Bendahara<br>
+                            3. Asli &amp; FC NPWP Sekolah/Kepsek/Bendahara
+                        </div>
+                        <div>
+                            4. Asli &amp; FC Berita Acara Kepsek lama ke Kepsek Baru<br>
+                            5. Buku Rekening Tabungan<br>
+                            6. Stempel Sekolah
+                        </div>
+                        </div>
+
+                        <p class="text-justify mb-5 font-normal-doc">Segala akibat yang akan timbul sehubungan dengan dilaksanakannya perubahan spesimen ini, maka sepenuhnya akan menjadi tanggung jawab kami dan membebaskan Bank BJB dari segala tanggung jawab dan tuntutan apapun.</p>
+                        <p class="text-justify mb-8">Demikian Surat Permohonan perubahan spesimen ini saya buat. Atas perhatiannya saya ucapkan terima kasih</p>
+                    
+                        <div class="w-72 ml-auto text-left leading-tight font-normal-doc">
+                        <span class="out-kota">Bekasi</span>, <span class="out-tgl-umum">21 Mei 2026</span><br>
+                        Kepala <span class="out-sekolah-doc"></span><br><br><br><br><br>
+                        <span class="name-underline out-ba-p2-nama font-bold">ROHIMAH, S.Pd</span><br>
+                        NIP. <span class="out-ba-p2-nip">19680604 200604 2 004</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        const PAGE_TITLES = {
+            "data-sekolah": "Data Sekolah",
+            "data-pejabat": "Data Pejabat",
+            "data-setting": "Pengaturan Dokumen",
+            "cetak-ba": "BA Sertijab Kepsek",
+            "cetak-ba-ben": "BA Sertijab Bendahara",
+            "cetak-sk": "SK Bendahara",
+            "cetak-specimen": "Surat Spesimen"
+        };
+
+        const STORAGE_KEY = "admin_bosp_state_v1";
+        const LOGO_STORAGE_KEY = "admin_bosp_logo_data_url_v1";
+        const KAB_BEKASI_LOGO_URL = "https://freeimghost.com/images/2026/01/22/Kabupaten-Bekasi.md.png";
+        const EMPTY_LOGO_DATA_URL = "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=";
+        let saveTimer = null;
+
+        function switchTab(event, tabId) {
+            if (event && typeof event.preventDefault === "function") event.preventDefault();
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
+            document.getElementById('tab-' + tabId).classList.remove('hidden');
+            document.querySelectorAll('.nav-link').forEach(btn => {
+                btn.classList.remove('bg-indigo-700', 'text-white', 'font-medium');
+                btn.classList.add('text-slate-400', 'hover:bg-slate-800', 'hover:text-white');
+                btn.removeAttribute("aria-current");
+            });
+            const activeBtn = document.getElementById('btn-' + tabId);
+            if (activeBtn) {
+                activeBtn.classList.add('bg-indigo-700', 'text-white', 'font-medium');
+                activeBtn.classList.remove('text-slate-400', 'hover:bg-slate-800', 'hover:text-white');
+                activeBtn.setAttribute("aria-current", "page");
+            }
+
+            const title = PAGE_TITLES[tabId] || "Admin BOSP";
+            const pageTitleEl = document.getElementById("page-title");
+            if (pageTitleEl) pageTitleEl.innerText = title;
+            document.title = `${title} - Aplikasi Administrasi BOSP`;
+        }
+
+        function previewImage(event) {
+            const reader = new FileReader();
+            reader.onload = () => {
+                const statusEl = document.getElementById("in-status");
+                if (statusEl && statusEl.value === "NEGERI") return;
+                const logo1 = document.getElementById('logo-1');
+                const logo2 = document.getElementById('logo-2');
+                if (logo1) logo1.src = reader.result;
+                if (logo2) logo2.src = reader.result;
+                try { localStorage.setItem(LOGO_STORAGE_KEY, reader.result); } catch (e) {}
+            };
+            if(event.target.files[0]) reader.readAsDataURL(event.target.files[0]);
+        }
+
+        function setKopLogo(src) {
+            const logo1 = document.getElementById("logo-1");
+            const logo2 = document.getElementById("logo-2");
+            if (logo1) logo1.src = src;
+            if (logo2) logo2.src = src;
+        }
+
+        function applySavedLogo() {
+            const statusEl = document.getElementById("in-status");
+            if (statusEl && statusEl.value !== "SWASTA") return;
+            let saved = null;
+            try { saved = localStorage.getItem(LOGO_STORAGE_KEY); } catch (e) {}
+            if (!saved) return;
+            setKopLogo(saved);
+        }
+
+        function getPersistableFields() {
+            return Array.from(document.querySelectorAll("input, select, textarea")).filter((el) => {
+                if (!el || !el.id) return false;
+                if (el.type === "file") return false;
+                return true;
+            });
+        }
+
+        function saveState() {
+            const state = {};
+            getPersistableFields().forEach((el) => {
+                state[el.id] = el.value;
+            });
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify({ v: 1, t: Date.now(), state }));
+                updateSaveBadge(true);
+            } catch (e) {}
+        }
+
+        function scheduleSave() {
+            if (saveTimer) window.clearTimeout(saveTimer);
+            saveTimer = window.setTimeout(saveState, 500);
+            updateSaveBadge(false);
+        }
+
+        function loadState() {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                if (!raw) return;
+                const parsed = JSON.parse(raw);
+                if (!parsed || !parsed.state) return;
+                Object.entries(parsed.state).forEach(([id, value]) => {
+                    const el = document.getElementById(id);
+                    if (!el) return;
+                    if (el.tagName === "SELECT") el.value = value;
+                    else el.value = value;
+                });
+            } catch (e) {}
+        }
+
+        function updateSaveBadge(isSaved) {
+            const badge = document.getElementById("save-badge");
+            if (!badge) return;
+            badge.classList.remove("hidden");
+            if (!isSaved) {
+                badge.innerText = "Menyimpan...";
+                badge.classList.remove("bg-emerald-50", "text-emerald-700", "border-emerald-200");
+                badge.classList.add("bg-amber-50", "text-amber-800", "border-amber-200");
+                return;
+            }
+            const time = new Date().toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" });
+            badge.innerText = `Tersimpan ${time}`;
+            badge.classList.remove("bg-amber-50", "text-amber-800", "border-amber-200");
+            badge.classList.add("bg-emerald-50", "text-emerald-700", "border-emerald-200");
+        }
+
+        function syncData() {
+            const toTitleCase = (value) => {
+                const input = (value || "").trim();
+                if (!input) return "";
+                const words = input.toLowerCase().split(/\s+/);
+                return words
+                    .map((word) => {
+                        if (!word) return "";
+                        if (/^\d+$/.test(word)) return word;
+                        const parts = word.split(/([-’'])/);
+                        return parts
+                            .map((p) => {
+                                if (!p) return "";
+                                if (p === "-" || p === "’" || p === "'") return p;
+                                if (/^\d+$/.test(p)) return p;
+                                return p[0].toUpperCase() + p.slice(1);
+                            })
+                            .join("");
+                    })
+                    .join(" ");
+            };
+            const terbilang = (input) => {
+                const n = Number(input);
+                if (!Number.isFinite(n)) return "";
+                const x = Math.floor(Math.abs(n));
+                const satuan = ["", "satu", "dua", "tiga", "empat", "lima", "enam", "tujuh", "delapan", "sembilan", "sepuluh", "sebelas"];
+                const inner = (v) => {
+                    if (v === 0) return "";
+                    if (v < 12) return satuan[v];
+                    if (v < 20) return `${satuan[v - 10]} belas`;
+                    if (v < 100) return `${satuan[Math.floor(v / 10)]} puluh ${inner(v % 10)}`.trim();
+                    if (v < 200) return `seratus ${inner(v - 100)}`.trim();
+                    if (v < 1000) return `${satuan[Math.floor(v / 100)]} ratus ${inner(v % 100)}`.trim();
+                    if (v < 2000) return `seribu ${inner(v - 1000)}`.trim();
+                    if (v < 10000) return `${inner(Math.floor(v / 1000))} ribu ${inner(v % 1000)}`.trim();
+                    return String(v);
+                };
+                return inner(x).trim();
+            };
+            const parseIndoDate = (value) => {
+                const s = (value || "").trim().replace(/\s+/g, " ");
+                const m = s.match(/^(\d{1,2})\s+([A-Za-zÀ-ÿ.]+)\s+(\d{4})$/);
+                if (!m) return null;
+                const day = m[1];
+                const month = toTitleCase(m[2].replace(/\.+$/g, ""));
+                const year = Number(m[3]);
+                if (!Number.isFinite(year)) return null;
+                return { day, month, year };
+            };
+            const splitSchoolPrefix = (raw) => {
+                const s = (raw || "").trim().replace(/\s+/g, " ");
+                if (!s) return { prefix: "", base: "" };
+                const prefixRegex = /^(SDN|SDIT|SD|SDS|MI|MTS|SMP|SMA|SMK|TK|RA)\b\.?\s*/i;
+                const m = s.match(prefixRegex);
+                if (!m) return { prefix: "", base: s };
+                const prefix = m[1].toUpperCase();
+                let base = s.slice(m[0].length).trim();
+                while (true) {
+                    const m2 = base.match(prefixRegex);
+                    if (!m2) break;
+                    base = base.slice(m2[0].length).trim();
+                }
+                return { prefix, base };
+            };
+
+            const status = document.getElementById('in-status').value;
+            const nmRaw = document.getElementById('in-nama-sekolah').value;
+            const kecRaw = document.getElementById('in-kecamatan').value;
+
+            const { prefix: nmPrefix, base: nmBaseRaw } = splitSchoolPrefix(nmRaw);
+            const nmBase = nmBaseRaw || "";
+            const nmTc = toTitleCase(nmBase);
+            const kecTc = toTitleCase(kecRaw);
+            const statusLc = status === 'NEGERI' ? 'Negeri' : 'Swasta';
+            const prefixUsed = nmPrefix || (status === 'NEGERI' ? 'SDN' : 'SD');
+            const sekolahKop = (prefixUsed + " " + (nmBase || "").toUpperCase()).trim();
+            const sekolahDoc = (prefixUsed + " " + nmTc).trim();
+
+            const noBupati = (document.getElementById("in-no-bupati") || {}).value || "";
+            const pemda = (document.getElementById('in-pemda') || {}).value || "PEMERINTAH KABUPATEN BEKASI";
+            const dinas = (document.getElementById('in-dinas') || {}).value || "DINAS PENDIDIKAN";
+
+            const renderTemplate = (value) => {
+                let text = value == null ? "" : String(value);
+                text = text.replaceAll("{SEKOLAH_DOC}", sekolahDoc);
+                text = text.replaceAll("{SEKOLAH_KOP}", sekolahKop);
+                text = text.replaceAll("{NAMA_SEKOLAH_TC}", nmTc);
+                text = text.replaceAll("{NAMA_SEKOLAH_UP}", (nmBase || "").toUpperCase());
+                text = text.replaceAll("{KECAMATAN_TC}", kecTc);
+                text = text.replaceAll("{KECAMATAN_UP}", (kecRaw || "").toUpperCase());
+                text = text.replaceAll("{STATUS_LC}", statusLc);
+                text = text.replaceAll("{NO_BUPATI}", noBupati);
+                return text;
+            };
+
+            const map = {
+                'in-nama-sekolah': '.out-nama-sekolah-up',
+                'in-kecamatan': '.out-kecamatan',
+                'in-email': '.out-email',
+                'in-alamat': '.out-alamat',
+                'in-kota': '.out-kota',
+                'in-tgl-umum': '.out-tgl-umum',
+                'in-rek-nama': '.out-rek-nama',
+                'in-rek-no': '.out-rek-no',
+                'in-no-sk': '.out-no-sk',
+                'in-no-spec': '.out-no-spec',
+                'in-no-bupati': '.out-no-bupati',
+                'in-memperhatikan-sk': '.out-memperhatikan-sk',
+                'in-tgl-sk': '.out-tgl-sk',
+                'in-tgl-ba': '.out-tgl-ba',
+                'in-hari-ba': '.out-hari-ba',
+                'in-tgl-teks': '.out-tgl-teks',
+                'in-bank': '.out-bank',
+                'in-judul-ba': '.out-judul-ba',
+                'ba-p2-nama': '.out-ba-p2-nama',
+                'ba-p2-nip': '.out-ba-p2-nip',
+                'ba-p2-gol': '.out-ba-p2-gol',
+                'ba-p2-jab': '.out-ba-p2-jab',
+                'ba-p1-nama': '.out-ba-p1-nama',
+                'ba-p1-nip': '.out-ba-p1-nip',
+                'ba-p1-gol': '.out-ba-p1-gol',
+                'ba-p1-jab': '.out-ba-p1-jab',
+                'ba-pengawas-nama': '.out-ba-pengawas-nama',
+                'ba-pengawas-nip': '.out-ba-pengawas-nip',
+                'ba-korwas-nama': '.out-ba-korwas-nama',
+                'ba-korwas-nip': '.out-ba-korwas-nip',
+                'ba-korwil-nama': '.out-ba-korwil-nama',
+                'ba-korwil-nip': '.out-ba-korwil-nip',
+                'sk-ben-nama': '.out-sk-ben-nama',
+                'sk-ben-nip': '.out-sk-ben-nip',
+                'sk-ben-ttl': '.out-sk-ben-ttl',
+                'sk-ben-pend': '.out-sk-ben-pend',
+                'sk-ben-alamat': '.out-sk-ben-alamat',
+                'in-yayasan-ketua': '.out-yayasan-ketua',
+                'in-yayasan-kop': '.out-yayasan-kop',
+                'ba-ben-p2-nama': '.out-ba-ben-p2-nama',
+                'ba-ben-p2-nip': '.out-ba-ben-p2-nip',
+                'ba-ben-p2-gol': '.out-ba-ben-p2-gol',
+                'ba-ben-p1-nama': '.out-ba-ben-p1-nama',
+                'ba-ben-p1-nip': '.out-ba-ben-p1-nip',
+                'ba-ben-p1-gol': '.out-ba-ben-p1-gol'
+            };
+
+            for (let id in map) {
+                const el = document.getElementById(id);
+                if (el) document.querySelectorAll(map[id]).forEach(o => o.innerText = renderTemplate(el.value));
+            }
+
+            document.querySelectorAll('.out-status').forEach(el => el.innerText = status);
+            document.querySelectorAll('.out-status-lc').forEach(el => el.innerText = statusLc);
+            document.querySelectorAll('.out-kop-line1').forEach(el => el.innerText = pemda);
+            document.querySelectorAll('.out-kop-line2').forEach(el => el.innerText = dinas);
+            document.querySelectorAll('.out-nama-sekolah-up').forEach(el => el.innerText = (nmBase || '').toUpperCase());
+            document.querySelectorAll('.out-nama-sekolah-tc').forEach(el => el.innerText = nmTc);
+            document.querySelectorAll('.out-sekolah-kop').forEach(el => el.innerText = sekolahKop);
+            document.querySelectorAll('.out-sekolah-doc').forEach(el => el.innerText = sekolahDoc);
+            document.querySelectorAll('.out-kecamatan').forEach(el => el.innerText = kecTc);
+            document.querySelectorAll('.out-kecamatan-tc').forEach(el => el.innerText = kecTc);
+            document.querySelectorAll('.out-kecamatan-up').forEach(el => el.innerText = (kecRaw || '').toUpperCase());
+            document.querySelectorAll('.out-kop-jenjang').forEach(el => el.innerText = prefixUsed);
+            document.querySelectorAll('.out-nama-sekolah-mixed').forEach(el => el.innerText = sekolahDoc + ' Kecamatan ' + kecTc);
+            document.querySelectorAll('.out-nama-sekolah-mixed-no-kec').forEach(el => el.innerText = nmTc);
+
+            const tglBaValue = (document.getElementById("in-tgl-ba") || {}).value || "";
+            const parsedBa = parseIndoDate(tglBaValue);
+            if (parsedBa) {
+                document.querySelectorAll(".out-ba-tanggal").forEach((el) => (el.innerText = parsedBa.day));
+                document.querySelectorAll(".out-ba-bulan").forEach((el) => (el.innerText = parsedBa.month));
+                document.querySelectorAll(".out-ba-tahun-terbilang").forEach((el) => (el.innerText = toTitleCase(terbilang(parsedBa.year))));
+            } else {
+                document.querySelectorAll(".out-ba-tanggal").forEach((el) => (el.innerText = tglBaValue));
+                document.querySelectorAll(".out-ba-bulan").forEach((el) => (el.innerText = ""));
+                document.querySelectorAll(".out-ba-tahun-terbilang").forEach((el) => (el.innerText = ""));
+            }
+
+            const memperhatikanInput = document.getElementById("in-memperhatikan-sk");
+            if (memperhatikanInput) {
+                const text = renderTemplate(memperhatikanInput.value || "");
+                document.querySelectorAll(".out-memperhatikan-sk").forEach((el) => (el.innerText = text));
+            }
+
+            const logoUploadWrap = document.getElementById("logo-upload-wrap");
+            if (logoUploadWrap) logoUploadWrap.classList.toggle("hidden", status === "NEGERI");
+            document.querySelectorAll(".kop-negeri-only").forEach((el) => el.classList.toggle("hidden", status === "SWASTA"));
+            document.querySelectorAll(".kop-swasta-only").forEach((el) => el.classList.toggle("hidden", status === "NEGERI"));
+            if (status === "NEGERI") {
+                setKopLogo(KAB_BEKASI_LOGO_URL);
+            } else {
+                let savedLogo = null;
+                try { savedLogo = localStorage.getItem(LOGO_STORAGE_KEY); } catch (e) {}
+                setKopLogo(savedLogo || EMPTY_LOGO_DATA_URL);
+            }
+
+            if (status === 'SWASTA') {
+                document.getElementById('grp-negeri').classList.add('hidden');
+                document.getElementById('grp-swasta').classList.remove('hidden');
+
+                // TTD BA Kepsek
+                document.getElementById('ttd-negeri').classList.add('hidden');
+                document.getElementById('ttd-swasta').classList.remove('hidden');
+
+                // TTD BA Bendahara
+                document.querySelectorAll('.gov-only').forEach(el => el.classList.add('hidden'));
+                document.querySelectorAll('.swasta-only').forEach(el => el.classList.remove('hidden'));
+                document.querySelectorAll('.gov-field').forEach(el => el.classList.add('hidden'));
+
+                // KOP: tampilkan panel swasta, sembunyikan panel negeri
+                ['kop-sk-negeri','kop-spec-negeri'].forEach(id => { const el=document.getElementById(id); if(el) el.classList.add('hidden'); });
+                ['kop-sk-swasta','kop-spec-swasta'].forEach(id => { const el=document.getElementById(id); if(el) el.classList.remove('hidden'); });
+
+                const yayasan = document.getElementById('in-yayasan-kop').value;
+                document.querySelectorAll('.out-kop-swasta-yayasan').forEach(el => el.innerText = yayasan);
+                document.querySelectorAll('.out-kop-swasta-sekolah').forEach(el => el.innerText = nmTc);
+                document.querySelectorAll('.out-dinas-kop').forEach(el => el.innerText = yayasan);
+
+            } else {
+                document.getElementById('grp-negeri').classList.remove('hidden');
+                document.getElementById('grp-swasta').classList.add('hidden');
+
+                // TTD BA Kepsek
+                document.getElementById('ttd-negeri').classList.remove('hidden');
+                document.getElementById('ttd-swasta').classList.add('hidden');
+
+                // TTD BA Bendahara
+                document.querySelectorAll('.gov-only').forEach(el => el.classList.remove('hidden'));
+                document.querySelectorAll('.swasta-only').forEach(el => el.classList.add('hidden'));
+                document.querySelectorAll('.gov-field').forEach(el => el.classList.remove('hidden'));
+
+                // KOP: tampilkan panel negeri, sembunyikan panel swasta
+                ['kop-sk-negeri','kop-spec-negeri'].forEach(id => { const el=document.getElementById(id); if(el) el.classList.remove('hidden'); });
+                ['kop-sk-swasta','kop-spec-swasta'].forEach(id => { const el=document.getElementById(id); if(el) el.classList.add('hidden'); });
+
+                const pemda = document.getElementById('in-pemda').value;
+                const dinas = document.getElementById('in-dinas').value;
+                document.querySelectorAll('.out-kop-line1').forEach(el => el.innerText = pemda);
+                document.querySelectorAll('.out-kop-line2').forEach(el => el.innerText = dinas);
+                document.querySelectorAll('.out-dinas-kop').forEach(el => el.innerText = dinas.toUpperCase() + ' KECAMATAN ' + (kecRaw || '').toUpperCase() + ' KABUPATEN BEKASI');
+            }
+        }
+
+        function updateNetworkBadge() {
+            const badge = document.getElementById("net-badge");
+            if (!badge) return;
+            if (navigator.onLine) badge.classList.add("hidden");
+            else badge.classList.remove("hidden");
+        }
+
+        function setupInstall() {
+            const installBtn = document.getElementById("install-btn");
+            if (!installBtn) return;
+            let deferredPrompt = null;
+
+            window.addEventListener("beforeinstallprompt", (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                installBtn.classList.remove("hidden");
+            });
+
+            window.addEventListener("appinstalled", () => {
+                deferredPrompt = null;
+                installBtn.classList.add("hidden");
+            });
+
+            installBtn.addEventListener("click", async () => {
+                if (!deferredPrompt) return;
+                deferredPrompt.prompt();
+                try {
+                    await deferredPrompt.userChoice;
+                } catch (e) {}
+                deferredPrompt = null;
+                installBtn.classList.add("hidden");
+            });
+        }
+
+        function setupServiceWorker() {
+            if (!("serviceWorker" in navigator)) return;
+            if (location.protocol !== "https:" && location.hostname !== "localhost") return;
+            navigator.serviceWorker.register("./sw.js").catch(() => {});
+        }
+
+        function setupFormListeners() {
+            document.querySelectorAll("input, select, textarea").forEach((el) => {
+                if (el.type === "file") {
+                    el.addEventListener("change", () => {
+                        syncData();
+                        scheduleSave();
+                    });
+                    return;
+                }
+                el.addEventListener("input", () => {
+                    syncData();
+                    scheduleSave();
+                });
+                el.addEventListener("change", () => {
+                    syncData();
+                    scheduleSave();
+                });
+            });
+        }
+
+        window.addEventListener("online", updateNetworkBadge);
+        window.addEventListener("offline", updateNetworkBadge);
+
+        window.onload = () => {
+            loadState();
+            applySavedLogo();
+            syncData();
+            updateNetworkBadge();
+            setupFormListeners();
+            setupInstall();
+            setupServiceWorker();
+            updateSaveBadge(true);
+        };
+    </script>
+</body>
+</html>
